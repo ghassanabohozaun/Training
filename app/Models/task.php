@@ -8,6 +8,6 @@ class task extends Model
 {
     protected $tabel = 'tasks';
     // public $primaryKey = 'id';
-    protected $timestamps = false;
-    protected $attribues = ['title', 'description', ' priority',];
+    //protected $timestamps = false;
+    protected $fillable  =   ['title', 'description', 'priority'];
 }
