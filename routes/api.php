@@ -1,7 +1,6 @@
 <?php
 
-
-use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,4 +10,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/checkUser/{id?}', [ClientsController::class, 'checkkUClientFunction']);
+Route::get('/test', function () {
+    return 'test';
+});
+
+Route::get('/index', [TestController::class, 'index']);
