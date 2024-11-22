@@ -11,6 +11,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/checkUser2/{id?}', [ClientsController::class, 'checkkUClientFunction']);
-
 Route::get('/checkUser/{id?}', [ClientsController::class, 'checkkUClientFunction']);
