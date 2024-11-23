@@ -20,17 +20,20 @@ class TasksController extends Controller
     {
 
 
-        $task = new task();
-        $task->title = 'title1111';
-        $task->description = 'description34324343243243423';
-        $task->priority = '111111';
-        $task->save();
+        $taskValidation =  $request->validate([
+            'title' => 'required|string|max:30',
+            'description' => 'required',
+            'priority' => 'required|integer|max:5|min:1',
+        ]);
 
-        // $tasks = task::create([
+
+        // $task = task::create([
         //     'title' => $request->title,
         //     'description' => $request->description,
         //     'priority' => $request->priority,
         // ]);
+
+        $task = task::create($taskValidation);
 
         return response()->json(['message' => 'record added', 'task' => $task], 201);
     }
@@ -40,8 +43,15 @@ class TasksController extends Controller
     {
         $task = task::find($id);
         if ($task) {
-            // $task->update($request->all());
-            $task->update($request->only('title', 'description', 'priority'));
+
+
+            $validationData = $request->validate([
+                'title' => 'sometimes|string|max:30',
+                'description' => 'sometimes',
+                'priority' => 'sometimes|integer|max:5|min:1',
+            ]);
+
+            $task->update($validationData);
             return response()->json($task, 200);
         } else {
             return response()->json('record not updated', 400);
