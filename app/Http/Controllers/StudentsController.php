@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreStudentRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,7 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreStudentRequest $request)
     {
         // $student = new Student();
         // $student->name = $request->name;
@@ -37,11 +38,13 @@ class StudentsController extends Controller
         //     return response()->json('Record not added', 400);
         // }
 
-        $student =  Student::create([
-            'name' => $request->name,
-            'age' => $request->age,
-            'grade' => $request->grade,
-        ]);
+        // $student =  Student::create([
+        //     'name' => $request->name,
+        //     'age' => $request->age,
+        //     'grade' => $request->grade,
+        // ]);
+
+        $student  = Student::create($request->validated());
 
 
         if ($student) {
@@ -74,7 +77,14 @@ class StudentsController extends Controller
             return response()->json('Record not exist', 400);
         }
 
-        $student->update($request->all());
+
+        $ValidationData = $request->validate([
+            'name' => 'sometimes|string|max:20',
+            'age' => 'sometimes|numeric',
+            'grade' => 'nullable|numeric'
+        ]);
+
+        $student->update($ValidationData);
 
         return response()->json(['msg' => 'Recored Updated successfully', 'data' => $student], 200);
     }
