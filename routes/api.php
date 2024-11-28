@@ -7,7 +7,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
-use App\Http\Controllers\userController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,7 +48,6 @@ Route::apiResource('/students', StudentsController::class);
 //////////////////////////////////////////////////////////////////////////////
 
 
-Route::apiResource('users', userController::class);
 
 Route::get('/profiles', [ProfileController::class, 'index']);
 Route::post('/profiles', [ProfileController::class, 'store']);
@@ -70,6 +69,9 @@ Route::apiResource('clientDetails', ClientDetailController::class);
 
 
 ///////////////////////////////////////////////////////////////////////////
+
+Route::apiResource('users', UserController::class);
+
 
 Route::get('/tasks', [TasksController::class, 'index']);
 Route::Post('tasks', [TasksController::class, 'store']);
