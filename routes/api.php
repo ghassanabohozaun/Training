@@ -71,8 +71,8 @@ Route::apiResource('clientDetails', ClientDetailController::class);
 
 ///////////////////////////////////////////////////////////////////////////
 
-Route::get('/task', [TasksController::class, 'index']);
-Route::Post('task', [TasksController::class, 'store']);
-Route::put('task/{id}', [TasksController::class, 'update']);
-Route::get('/task/{id}', [TasksController::class, 'show']);
-Route::delete('task/{id}', [TasksController::class, 'delete']);
+Route::get('/tasks', [TasksController::class, 'index']);
+Route::Post('tasks', [TasksController::class, 'store']);
+Route::put('tasks/{id}', [TasksController::class, 'update']);
+Route::get('/tasks/{id}', [TasksController::class, 'show']);
+Route::delete('tasks/{id}', [TasksController::class, 'delete']);
