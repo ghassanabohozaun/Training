@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateClientRequest extends FormRequest
+class StoreProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,19 +21,11 @@ class UpdateClientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules =  [
-            'name' => 'sometimes|required|string|max:20',
-            'age' => 'sometimes|required|integer',
-            'class' => 'sometimes',
-        ];
-        return $rules;
-    }
-
-    public function messages()
-    {
         return [
-            'name.max' => 'Client Name must be at least 20 characters',
-            'age.integer' => 'Client Age musst be numeric',
+            'mobile' => 'required|string|max:10',
+            'address' => 'sometimes|required|string|max:100',
+            'birthday' => 'sometimes|required|date',
+            'bio' => 'sometimes|required|max:400',
         ];
     }
 }

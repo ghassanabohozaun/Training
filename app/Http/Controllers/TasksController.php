@@ -3,79 +3,105 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
-use App\Models\task;
-use App\Models\User;
+use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
 
+    // index
+
     public function index()
     {
-        $tasks = task::all();
+
+        $tasks = Task::get();
         if ($tasks->isEmpty()) {
-            return  response()->json('no records found', 404);
+            return response()->json('Sorry No Data Found', 404);
         }
-        return  response()->json($tasks, 200);
+
+        return response()->json($tasks, 200);
     }
 
 
+
+    // store
     public function store(StoreTaskRequest $request)
     {
-        $task = task::create($request->validated());
+
+        // $task = new Task();
+        // $task->title = 'title 1';
+        // $task->description = 'description 1';
+        // $task->priority = '1';
+
+        // $task  = new Task();
+        // $task->title = $request->title;
+        // $task->description =  $request->description;
+        // $task->priority = $request->priority;
+
+        // if ($task->save()) {
+        //     return response()->json(['msg' => 'Success , recored added  ', 'data' => $task], 200);
+        // } else {
+        //     return response()->json('Error , Record Not Addedd', 200);
+        // }
+
+        // $task  = Task::create([
+        //     'title' => $request->title,
+        //     'description' => $request->description,
+        //     'priority' => $request->priority,
+        // ]);
+
+        // $validationData = $request->validate([
+        //     'title' => 'required|string|max:20',
+        //     'description' => 'required|string|max:100',
+        //     'priority' => 'required|numeric',
+        // ]);
+
+        $task = Task::create($request->validated());
+
+
         if (!$task) {
-            return response()->json(['message' => 'record  not added'], 400);
+            return response()->json('Error , Record Not Addedd', 400);
         }
-        return response()->json(['message' => 'record added', 'task' => $task], 201);
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        $task = task::find($id);
-        if ($task) {
-
-
-            $validationData = $request->validate([
-                'title' => 'sometimes|string|max:30',
-                'description' => 'sometimes',
-                'priority' => 'sometimes|integer|max:5|min:1',
-            ]);
-
-            $task->update($validationData);
-            return response()->json($task, 200);
-        } else {
-            return response()->json('record not updated', 400);
-        }
+        return response()->json(['msg' => 'Success , Recored Added  ', 'data' => $task], 200);
     }
 
     public function show($id)
     {
-        $task = task::find($id);
-        if ($task) {
-            return response()->json($task, 200);
-        } else {
-            return response()->json('record not found', 204);
-        }
-    }
-
-
-    public function delete($id)
-    {
-        $task = task::find($id);
-        $task->delete();
-        return response()->json('record deleted', 204);
-    }
-
-    public function getUserByTask($id)
-    {
-        $task  = task::find($id);
+        $task = Task::find($id);
         if (!$task) {
-            return response()->json('record not found', 200);
+            return response()->json('Error , Record Not Found', 404);
         }
 
-        $user = $task->user;
+        return response()->json($task, 200);
+    }
 
-        return response()->json($user, 200);
+
+
+    public function update(UpdateTaskRequest $request, $id)
+    {
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json('Error , Record Not Found', 404);
+        }
+
+        $task->update($request->validated());
+
+        return response()->json(['msg' => 'Success , Recored Updated  ', 'data' => $task], 200);
+    }
+
+    public function destroy($id)
+    {
+
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json('Error , Record Not Found', 404);
+        }
+
+        if ($task->delete()) {
+            return response()->json(['msg' => 'Success , Recored Deleted'], 202);
+        } else {
+            return response()->json(['msg' => 'Error , Recored  Not Deleted  ', 'data' => $task], 400);
+        }
     }
 }

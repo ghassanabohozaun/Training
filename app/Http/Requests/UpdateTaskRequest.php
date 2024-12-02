@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEmployeeRequest extends FormRequest
+class UpdateTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,19 +22,18 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         $rules =  [
-            'name' => 'sometimes',
-            'age' => 'sometimes|integer',
-            'salary' => 'sometimes|numeric',
+            'title' => 'required|string|max:20',
+            'description' => 'required|string|max:100',
+            'priority' => 'required|numeric',
         ];
         return $rules;
     }
 
-
     public function messages()
     {
         return [
-            'age.integer' => 'My Age must be an integer',
-            'salary.numeric' => 'My salary must be numeric',
+            'required' => ' Filed Is Required',
+            'numeric' => ' Filed Must Be Numeric',
         ];
     }
 }

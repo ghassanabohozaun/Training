@@ -2,85 +2,106 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProfilesRequest;
+use App\Http\Requests\StoreProfileRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
 
+    // index
 
     public function index()
     {
+
         $profiles = Profile::get();
         if ($profiles->isEmpty()) {
-            return response()->json('No Recored Exists', 400);
+            return response()->json('Sorry No Data Found', 404);
         }
 
         return response()->json($profiles, 200);
     }
 
+
+
     // store
-    public function store(StoreProfilesRequest $request)
+    public function store(StoreProfileRequest $request)
     {
-        // $profile = new Profile();
-        // $profile->user_id = $request->user_id;
-        // $profile->address = $request->address;
-        // $profile->mobile = $request->mobile;
-        // $profile->phone = $request->phone;
-        // $profile->birthday = $request->birthday;
-        // $profile->bio = $request->bio;
-        // $profile->save();
+
+        // $task = new Task();
+        // $task->title = 'title 1';
+        // $task->description = 'description 1';
+        // $task->priority = '1';
+
+        // $task  = new Task();
+        // $task->title = $request->title;
+        // $task->description =  $request->description;
+        // $task->priority = $request->priority;
+
+        // if ($task->save()) {
+        //     return response()->json(['msg' => 'Success , recored added  ', 'data' => $task], 200);
+        // } else {
+        //     return response()->json('Error , Record Not Addedd', 200);
+        // }
+
+        // $task  = Task::create([
+        //     'title' => $request->title,
+        //     'description' => $request->description,
+        //     'priority' => $request->priority,
+        // ]);
+
+        // $validationData = $request->validate([
+        //     'title' => 'required|string|max:20',
+        //     'description' => 'required|string|max:100',
+        //     'priority' => 'required|numeric',
+        // ]);
 
         $profile = Profile::create($request->validated());
 
-        return response()->json(['msg' => 'profile addedd', 'data' => $profile], 201);
+
+        if (!$profile) {
+            return response()->json('Error , Record Not Addedd', 400);
+        }
+        return response()->json(['msg' => 'Success , Recored Added  ', 'data' => $profile], 200);
     }
-
-
 
     public function show($id)
     {
-
         $profile = Profile::find($id);
-
         if (!$profile) {
-            return response()->json('Reocrod Not Found', 400);
+            return response()->json('Error , Record Not Found', 404);
         }
+
         return response()->json($profile, 200);
     }
 
 
 
-    public function update(StoreProfilesRequest $request, $id)
+    public function update(UpdateProfileRequest $request, $id)
     {
-
-        $profile  = Profile::find($id);
+        $profile = Profile::find($id);
         if (!$profile) {
-            return response()->json('Reocrod Not Found', 400);
+            return response()->json('Error , Record Not Found', 404);
         }
 
         $profile->update($request->validated());
 
-        return response()->json(['msg' => 'profile updated', 'data' => $profile], 200);
+        return response()->json(['msg' => 'Success , Recored Updated  ', 'data' => $profile], 200);
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
 
         $profile = Profile::find($id);
         if (!$profile) {
-            return response()->json('Reocrod Not Found', 400);
+            return response()->json('Error , Record Not Found', 404);
         }
 
-        $profile->delete();
-
-        return response()->json('Profile Deteted', 200);
-    }
-
-    public function getUserProfile($id)
-    {
-        $profile = Profile::where('user_id', $id)->first();
-        return $profile;
+        if ($profile->delete()) {
+            return response()->json(['msg' => 'Success , Recored Deleted'], 202);
+        } else {
+            return response()->json(['msg' => 'Error , Recored  Not Deleted  ', 'data' => $profile], 400);
+        }
     }
 }
