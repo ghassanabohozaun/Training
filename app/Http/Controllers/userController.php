@@ -27,4 +27,17 @@ class UserController extends Controller
 
         return response()->json($userProfile, 200);
     }
+
+
+    public function getUserTasks($id)
+    {
+
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json('record not found', 200);
+        }
+
+        $userTasks = $user->tasks;
+        return response()->json($userTasks, 200);
+    }
 }
